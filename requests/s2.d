@@ -1,0 +1,1 @@
+SUPPLIERS { SID, NAME }

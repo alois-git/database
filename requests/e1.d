@@ -1,0 +1,1 @@
+(SHIPMENTS WHERE PID = P#("P1"))  {SID}

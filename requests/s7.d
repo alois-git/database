@@ -1,0 +1,1 @@
+SUPPLIERS WHERE NOT (CITY = "London") AND NOT (CITY = "Athens")
