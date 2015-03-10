@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<submission>
+  <student>
+    <name>Alois Paulus</name>
+    <noma>5299-14-00</noma>
+  </student>
+  <solutions>
+
+    <puzzle id="S1">
+
+      <answer language="tutorial-d"><![CDATA[
+        SUPPLIERS
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+        ﻿select * from suppliers
+      ]]></answer>
+
+    </puzzle>
+
+   <puzzle id="S2">
+
+      <answer language="tutorial-d"><![CDATA[
+	SUPPLIERS { SID, NAME }
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	﻿select 	sid,name from suppliers
+      ]]></answer>
+
+    </puzzle>
+
+   <puzzle id="S3">
+
+      <answer language="tutorial-d"><![CDATA[
+	SUPPLIERS { ALL BUT STATUS }
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	﻿select sid,name,city from suppliers
+      ]]></answer>
+
+    </puzzle>
+
+ <puzzle id="S4">
+
+      <answer language="tutorial-d"><![CDATA[
+	SUPPLIERS { CITY }
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	﻿select distinct city from suppliers
+      ]]></answer>
+
+    </puzzle>
+
+ <puzzle id="S5">
+
+      <answer language="tutorial-d"><![CDATA[
+	SUPPLIERS  WHERE STATUS >= 15 AND STATUS <=25
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	﻿select distinct * from suppliers where (status >= 15 and status <= 25)
+      ]]></answer>
+
+    </puzzle>
+
+ <puzzle id="S6">
+
+      <answer language="tutorial-d"><![CDATA[
+	SUPPLIERS  WHERE CITY = "London" OR CITY = "Athens"
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	﻿select distinct * from suppliers where (city = 'London' or city = 'Athens')
+      ]]></answer>
+
+    </puzzle>
+
+ <puzzle id="S7">
+
+      <answer language="tutorial-d"><![CDATA[
+	SUPPLIERS WHERE NOT (CITY = "London") AND NOT (CITY = "Athens")
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	﻿select distinct * from suppliers  where (city != 'London' and city != 'Athens')
+      ]]></answer>
+
+    </puzzle>
+
+ <puzzle id="S8">
+
+      <answer language="tutorial-d"><![CDATA[
+	(SUPPLIERS WHERE CITY = "London") { SID }
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	﻿select distinct sid from suppliers where (city = 'London')
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="E1">
+
+      <answer language="tutorial-d"><![CDATA[
+
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="E2">
+
+      <answer language="tutorial-d"><![CDATA[
+
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="E3">
+
+      <answer language="tutorial-d"><![CDATA[
+
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="E4">
+
+      <answer language="tutorial-d"><![CDATA[
+
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="E5">
+
+      <answer language="tutorial-d"><![CDATA[
+
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="E6">
+
+      <answer language="tutorial-d"><![CDATA[
+
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+
+      ]]></answer>
+
+    </puzzle>
+
+
+
+
+  </solutions>
+</submission>
