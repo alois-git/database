@@ -1,1 +1,1 @@
-﻿select distinct suppliers.sid, name, status, city from shipments join suppliers on shipments.sid = suppliers.sid;
+select distinct sup.sid, name, status, city from shipments as ship join suppliers as sup on ship.sid = sup.sid
