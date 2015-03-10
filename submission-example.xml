@@ -251,11 +251,11 @@ WHERE sid = sup.sid )
 <puzzle id="D1">
 
       <answer language="tutorial-d"><![CDATA[
-
+	 ((PARTS RENAME {NAME AS PARTNAME, CITY AS PARTCITY}) NOT MATCHING (SHIPMENTS JOIN (SUPPLIERS WHERE CITY = "Paris")) ) {PID}
       ]]></answer>
 
       <answer language="sql"><![CDATA[
-
+	(select pid from parts) EXCEPT (select distinct pid from suppliers as sup join shipments as ship using(sid) join parts as part using (pid) where sup.city = 'Paris')
       ]]></answer>
 
     </puzzle>
@@ -263,11 +263,17 @@ WHERE sid = sup.sid )
 <puzzle id="D2">
 
       <answer language="tutorial-d"><![CDATA[
-
+	COUNT((EXTEND SUPPLIERS : { PARTSHIPED := ( SHIPMENTS JOIN RELATION { TUPLE { SID SID } } ) } { SID, PARTSHIPED}) WHERE PARTSHIPED{PID} = PARTS{PID})
       ]]></answer>
 
       <answer language="sql"><![CDATA[
-
+SELECT distinct sid FROM shipments AS ship1
+WHERE NOT EXISTS (
+SELECT * FROM parts AS part
+WHERE NOT EXISTS (
+SELECT * FROM shipments AS ship2
+WHERE ship2.sid = ship1.sid
+AND ship2.pid = part.pid ) )
       ]]></answer>
 
     </puzzle>
@@ -275,11 +281,11 @@ WHERE sid = sup.sid )
 <puzzle id="D3">
 
       <answer language="tutorial-d"><![CDATA[
-
+	SUPPLIERS WHERE STATUS < (STATUS FROM (TUPLE FROM SUPPLIERS WHERE SID = S#("S1"))) 
       ]]></answer>
 
       <answer language="sql"><![CDATA[
-
+	﻿select distinct * from suppliers where status < (select distinct status from suppliers where SID = 'S1')
       ]]></answer>
 
     </puzzle>
@@ -287,11 +293,11 @@ WHERE sid = sup.sid )
 <puzzle id="D4">
 
       <answer language="tutorial-d"><![CDATA[
-
+	(SUPPLIERS JOIN PARTS RENAME {NAME AS PARTNAME, CITY AS PARTCITY} NOT MATCHING SHIPMENTS) {SID,PID}
       ]]></answer>
 
       <answer language="sql"><![CDATA[
-
+	﻿select distinct sid,pid from suppliers, parts except select distinct sid,pid from shipments
       ]]></answer>
 
     </puzzle>
@@ -299,7 +305,41 @@ WHERE sid = sup.sid )
 <puzzle id="D5">
 
       <answer language="tutorial-d"><![CDATA[
+	SUMMARIZE (SUMMARIZE PARTS BY {CITY} :{ sd:=count(), total:=SUM(0),ss:=SUM(0) }
+UNION
+SUMMARIZE (SUMMARIZE SHIPMENTS PER ( SUPPLIERS{SID,CITY} ) : {total:=SUM(QTY)}) BY {CITY} :{ total:=SUM(total), ss:=count(), sd:=SUM(0)}) BY {CITY} : {total:=SUM(total), ss:=SUM(ss), sd:=SUM(sd)}
+      ]]></answer>
 
+      <answer language="sql"><![CDATA[
+	﻿select city,SUM(total) as total, SUM(sd) as sd, SUM(ss) as ss from ((select city,sum(total) as total, count(*) as ss, 0 as sd from (SELECT sid,city,(select sum(QTY) from shipments where sup.sid = sid) as total from suppliers as sup WHERE exists (SELECT * FROM shipments
+WHERE sup.sid = sid ) 
+UNION
+SELECT sid, city,0 as total
+FROM suppliers AS sup WHERE NOT EXISTS (
+SELECT * FROM shipments
+WHERE sup.sid = sid )) as temp1 group by city)
+UNION
+SELECT city,0 as total, 0 as ss, count(*) as sd from parts group by city)  as temps2 group by city
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="D6">
+
+      <answer language="tutorial-d"><![CDATA[
+	PARTS WHERE WEIGHT >= ( MAX(PARTS,WEIGHT)) and NAME = MIN((PARTS WHERE WEIGHT >= ( MAX(PARTS,WEIGHT))) , NAME)
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	﻿select distinct * from parts where weight >= (select MAX(weight) from parts) and NAME = (select min(NAME) from parts where weight >= (select MAX(weight) from parts))
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="H1">
+
+      <answer language="tutorial-d"><![CDATA[
+	((PARTS RENAME {NAME as PARTNAME}) {CITY})  JOIN SUMMARIZE SUPPLIERS BY {CITY} :{ avg_status := AVG(STATUS) } 
       ]]></answer>
 
       <answer language="sql"><![CDATA[
@@ -308,10 +348,51 @@ WHERE sid = sup.sid )
 
     </puzzle>
 
-<puzzle id="D6">
+
+<puzzle id="H2">
 
       <answer language="tutorial-d"><![CDATA[
+EXTEND PARTS : { PARTSUPPLIERS := ( SHIPMENTS JOIN RELATION { TUPLE {  PID PID} } ) {SID} } {PID, PARTSUPPLIERS} WHERE PARTSUPPLIERS {SID} >= (SUPPLIERS WHERE CITY = 'London') {SID}
+      ]]></answer>
 
+      <answer language="sql"><![CDATA[
+
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="H3">
+
+      <answer language="tutorial-d"><![CDATA[
+	((EXTEND SUPPLIERS : { PARTSHIPED := ( SHIPMENTS JOIN RELATION { TUPLE {  SID SID } } ) {PID} } RENAME {SID AS SID1, PARTSHIPED AS PARTSHIPEDC}) {SID1, PARTSHIPEDC})
+
+JOIN 
+
+((EXTEND SUPPLIERS : { PARTSHIPED := ( SHIPMENTS JOIN RELATION { TUPLE {  SID SID } } ) {PID} } RENAME {SID AS SID2, PARTSHIPED AS PARTSHIPEDC}) {SID2, PARTSHIPEDC})
+
+WHERE SID1 <> SID2
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="H4">
+
+      <answer language="tutorial-d"><![CDATA[
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="H5">
+
+      <answer language="tutorial-d"><![CDATA[
       ]]></answer>
 
       <answer language="sql"><![CDATA[
