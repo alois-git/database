@@ -105,11 +105,11 @@
 <puzzle id="E1">
 
       <answer language="tutorial-d"><![CDATA[
-
+	(SHIPMENTS WHERE PID = P#("P1"))  {SID}
       ]]></answer>
 
       <answer language="sql"><![CDATA[
-
+	﻿select distinct sid from shipments where (PID = 'P1')
       ]]></answer>
 
     </puzzle>
@@ -117,11 +117,11 @@
 <puzzle id="E2">
 
       <answer language="tutorial-d"><![CDATA[
-
+	COUNT(SHIPMENTS)
       ]]></answer>
 
       <answer language="sql"><![CDATA[
-
+	﻿select count(*) from shipments
       ]]></answer>
 
     </puzzle>
@@ -129,11 +129,11 @@
 <puzzle id="E3">
 
       <answer language="tutorial-d"><![CDATA[
-
+	COUNT(SHIPMENTS WHERE SID = S#("S1"))  
       ]]></answer>
 
       <answer language="sql"><![CDATA[
-
+	﻿select count(*) from shipments where sid = 'S1'
       ]]></answer>
 
     </puzzle>
@@ -141,11 +141,11 @@
 <puzzle id="E4">
 
       <answer language="tutorial-d"><![CDATA[
-
+	 (SHIPMENTS JOIN SUPPLIERS) {SID, NAME, STATUS, CITY }
       ]]></answer>
 
       <answer language="sql"><![CDATA[
-
+	﻿select distinct sup.sid, name, status, city from shipments as ship join suppliers as sup on ship.sid = sup.sid
       ]]></answer>
 
     </puzzle>
@@ -153,16 +153,102 @@
 <puzzle id="E5">
 
       <answer language="tutorial-d"><![CDATA[
-
+	(SUPPLIERS MINUS ((SHIPMENTS JOIN SUPPLIERS) {SID, NAME, STATUS, CITY }))
       ]]></answer>
 
       <answer language="sql"><![CDATA[
-
+	select sid,name,status from suppliers where sid not in (select distinct sid from shipments);
       ]]></answer>
 
     </puzzle>
 
 <puzzle id="E6">
+
+      <answer language="tutorial-d"><![CDATA[
+	((SHIPMENTS JOIN PARTS RENAME { NAME as PARTNAME }) JOIN SUPPLIERS) {SID,NAME,PID,PARTNAME}
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	﻿select sid, suppliers.name as sname , pid, parts.name as pname, qty from shipments join suppliers using(sid) join parts using(pid)
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="M1">
+
+      <answer language="tutorial-d"><![CDATA[
+	SUM((SHIPMENTS WHERE SID = S#("S1")), QTY)  
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	﻿SELECT SUM(qty) from shipments join parts using (pid) where sid = 'S1'
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="M2">
+
+      <answer language="tutorial-d"><![CDATA[
+	((SUPPLIERS WHERE CITY = "Paris") JOIN SHIPMENTS)  {PID}
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	SELECT distinct pid from suppliers as sup join shipments using(sid) where sup.city = 'Paris'
+      ]]></answer>
+
+    </puzzle>
+<puzzle id="M3">
+
+      <answer language="tutorial-d"><![CDATA[
+	((SUMMARIZE SUPPLIERS BY {CITY} : { c := COUNT() }) WHERE c>=2) {CITY}
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	SELECT city from suppliers group by city having count(*) >= 2
+      ]]></answer>
+
+    </puzzle>
+<puzzle id="M4">
+
+      <answer language="tutorial-d"><![CDATA[
+	(SUPPLIERS WHERE CITY <= MIN(SUPPLIERS,CITY)) {SID}
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	﻿select sid from suppliers where city <= (select MIN(city) from suppliers)
+      ]]></answer>
+
+    </puzzle>
+<puzzle id="M5">
+
+      <answer language="tutorial-d"><![CDATA[
+	SUMMARIZE SHIPMENTS PER (SUPPLIERS {SID}) : { total:=SUM(QTY)}
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	﻿SELECT sid, sum(QTY)
+FROM shipments GROUP BY sid
+UNION
+SELECT sid, 0
+FROM suppliers AS sup WHERE NOT EXISTS (
+SELECT * FROM shipments
+WHERE sid = sup.sid )
+      ]]></answer>
+
+    </puzzle>
+<puzzle id="M6">
+
+      <answer language="tutorial-d"><![CDATA[
+	(PARTS WHERE WEIGHT <= MIN ( PARTS , WEIGHT) ) {PID}
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+	﻿select distinct pid from parts where weight <= (select min(weight) from parts)
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="D1">
 
       <answer language="tutorial-d"><![CDATA[
 
@@ -174,8 +260,65 @@
 
     </puzzle>
 
+<puzzle id="D2">
 
+      <answer language="tutorial-d"><![CDATA[
 
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="D3">
+
+      <answer language="tutorial-d"><![CDATA[
+
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="D4">
+
+      <answer language="tutorial-d"><![CDATA[
+
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="D5">
+
+      <answer language="tutorial-d"><![CDATA[
+
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+
+      ]]></answer>
+
+    </puzzle>
+
+<puzzle id="D6">
+
+      <answer language="tutorial-d"><![CDATA[
+
+      ]]></answer>
+
+      <answer language="sql"><![CDATA[
+
+      ]]></answer>
+
+    </puzzle>
 
   </solutions>
 </submission>
