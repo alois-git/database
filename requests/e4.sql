@@ -1,0 +1,1 @@
+﻿select distinct suppliers.sid, name, status, city from shipments join suppliers on shipments.sid = suppliers.sid;

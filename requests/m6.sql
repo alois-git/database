@@ -1,0 +1,1 @@
+﻿select distinct pid from parts where weight <= (select min(weight) from parts);

@@ -1,0 +1,1 @@
+﻿select sid, suppliers.name as sname , pid, parts.name as pname, qty from shipments join suppliers using(sid) join parts using(pid);

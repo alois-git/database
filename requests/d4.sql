@@ -1,0 +1,1 @@
+﻿select distinct sid,pid from suppliers, parts except select distinct sid,pid from shipments;

@@ -1,0 +1,1 @@
+﻿select distinct * from suppliers where (city = 'London' or city = 'Athens');

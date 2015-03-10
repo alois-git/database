@@ -1,0 +1,1 @@
+﻿select distinct * from suppliers where status < (select distinct status from suppliers where SID = 'S1')

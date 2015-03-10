@@ -1,0 +1,1 @@
+﻿select sid from suppliers where city <= (select MIN(city) from suppliers);

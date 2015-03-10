@@ -1,0 +1,1 @@
+﻿select sid,name,city from suppliers;

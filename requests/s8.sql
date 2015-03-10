@@ -1,0 +1,1 @@
+﻿select distinct sid from suppliers where (city = 'London');
