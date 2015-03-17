@@ -1,0 +1,30 @@
+1.a)
+
+a) 
+
+1) In the table client, the domain of the attribute groups does not only include atomic values. This break the 1FN.
+You can see that in groups you can have multiple values : 'customer employee'. 
+
+2) This is bad because it is hard to define a domain for the attribute groups and also searching throw the data is harder because we have
+to analyse the content of the attribute groups.
+
+3) If we want every client which is in the group customer, the query will not be that easy, it will need to look inside the content of the attribute groups for every client. This can take a long time if the list of groups for the costumers are big and is really not easy to query. Also if you want to enumerate every group that exist it gets really complicated.
+
+4) To fix this we sould remove the attribute groups from the client table and create a new table having 2 attributes, the client ID and a group name.
+
+ 
+b)
+
+1) 
+
+a) In the table OrderLine we have the dependency : OrderLine# -> order#, product#, qty,price and product# -> price
+
+This violate the 3FN because a database should not have transitive functional dependency. This means that a non key attributes depends on
+a attribute which is not part of the key.
+
+b) This is bad because a redondancy and also for retrieving the price of a product easily.
+
+c) For example I have multiple row containing the qty "1" and the product with id "1" you will have multiple time the same price in the
+OrderLine table. This is redondent and can be avoided.
+
+d) We can avoid this by removing the price attribute from the OrderLine table and put it in the Product table. 
