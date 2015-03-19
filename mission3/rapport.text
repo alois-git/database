@@ -1,9 +1,9 @@
 1.a)
 
-a) 
+A) 
 
 1) In the table client, the domain of the attribute groups does not only include atomic values. This break the 1FN.
-You can see that in groups you can have multiple values : 'customer employee'. 
+You can see that in groups you can have multiple values, it is an array of values : 'customer, employee'. 
 
 2) This is bad because it is hard to define a domain for the attribute groups and also searching throw the data is harder because we have
 to analyse the content of the attribute groups.
@@ -13,18 +13,94 @@ to analyse the content of the attribute groups.
 4) To fix this we sould remove the attribute groups from the client table and create a new table having 2 attributes, the client ID and a group name.
 
  
-b)
+B)
 
-1) 
 
-a) In the table OrderLine we have the dependency : OrderLine# -> order#, product#, qty,price and product# -> price
+1) In the table OrderLine we have the dependencies : 
+
+\begin{enumerate}
+\item OrderLine# -> order#, product#, qty,price  
+\item product# -> price
+\end{enumerate}
 
 This violate the 3FN because a database should not have transitive functional dependency. This means that a non key attributes depends on
 a attribute which is not part of the key.
 
-b) This is bad because a redondancy and also for retrieving the price of a product easily.
+2) This is bad because a redondancy and also for retrieving the price of a product easily.
 
-c) For example I have multiple row containing the qty "1" and the product with id "1" you will have multiple time the same price in the
+3) For example I have multiple row containing the qty "1" and the product with id "1" you will have multiple time the same price in the
 OrderLine table. This is redondent and can be avoided.
 
-d) We can avoid this by removing the price attribute from the OrderLine table and put it in the Product table. 
+4) We can avoid this by removing the price attribute from the OrderLine table and put it in the Product table. 
+
+
+C)
+
+1) In the promotion table we have the attribute order# which is useless because we can retrieve it with the orderline# attibute ( orderline# -> order#). 
+
+2) This is bad because of redondancy and we keep a useless attribute for nothing. Also we can have inconsistent data.
+
+3) For exemple we could have a promotion with a orderline from order X and a order of value Y. This is totaly wrong, the orderline is not contained in the order Y. 
+
+4) Removing the attribute order# from the promotion table would solve the problem and it will also reduce redondency.
+
+D)
+
+1) In the table Order we have the attribute orderTotal which is a calculated attribute and should not be part of the Order table, rather it should be calculated from the order lines, products and promotions table. This is maybe less performance oriented but avoid duplicate data.
+
+2) This can be bad because we can store a wrong total and make our database inconsistent.
+
+3) For exemple if a item price changes. 
+
+4) Removing the attribute orderTotal and make the calculation every time we need it. I have to agree that this problem is more complicated than the previous problems, because we might want to keep the price for a order at a given date. 
+It is indeed strange to have a different amount for the same order if we calculate it on a different date.
+
+2)
+
+I can easily spot these failure in exercice 1 :
+
+\begin{itemize}
+\item The database documentation is very poor and it took me some time to understand it because of that (Failure #2) 
+\item The database is not normalize ! (Failure #4)
+\item Every table in the database as a artificial key as primary key (Failure #8)
+\item Some tables can have problem with data integrity, e.g promotion (Failure #9)
+\end{itemize}
+
+The one I find really important is, the naming convention.
+
+Deciding on a naming convention for your database and respecting it throught the entire database and during the whole development and beyond
+is a great way to ensure a good understanding of the database. Because when you see field named "a" or "myfieldTest" it is a lot harder to understand the database schema. Sometimes you can even come accross names that include reserved work or space which make it harder to build query.
+
+
+3.a)
+
+1) 
+
+The doubly stoked lines around entities means that they are weak entities. Weak entities cannot be identified by their attributes alone, they need to have a relationship with another entity. Usually weak entities have partial keys which are added to the key of the entity they are link to. This enable to identify a weak entity uniquely.
+
+The double roles lines is a total participation constraint, it means that every entity must participate in the relationship. Here every Travel entity must have a following relationship with a Line entity. It is not true for Line entity.
+
+2) orderNum + code (the partial key from section + the key from Line)
+
+3.b)
+
+3.c)
+
+3.d)
+
+I think you should put a director table with agentID and stationID and if there is no agent for a station, there is not tuple in the table.
+
+
+3.e) You need to change the cardinality for the relation Line - Section to (1,n) instead of (0,n)
+
+TODO
+
+3.f)
+
+
+
+ 
+
+
+
+
