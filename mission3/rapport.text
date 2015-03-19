@@ -82,20 +82,35 @@ The double roles lines is a total participation constraint, it means that every 
 
 2) orderNum + code (the partial key from section + the key from Line)
 
-3.b)
+3.b) \figure{schema.png}
 
-3.c)
+3.c) no it did not
 
-3.d)
+3.d) 
+
+Conceptual schema : the relation director become (0,1) for the station entity. 
+Logical schema : you can have station that does not have a director so you have to allow a null for the attribute director in station.
+
+To solve that we should introduce a new relation, a intersection relation, we can call it director which has two attribute, the empno primary key of agent and the name primary key of station.
+We should avoid null because the relational theory use a 2 valued logic, either the predicate is true or false but there is no in between.
 
 I think you should put a director table with agentID and stationID and if there is no agent for a station, there is not tuple in the table.
 
 
-3.e) You need to change the cardinality for the relation Line - Section to (1,n) instead of (0,n)
+3.e) Conceptual schema : You need to change the cardinality for the relation Line - Section to (1,n) instead of (0,n)
 
-TODO
+Logical schema : when you create a new line you should make sure that it is referenced by at least one section
+
+Tutorial D: TODO
+
+SQL: you have to use triggers to check that.
 
 3.f)
+
+The attribute length depend on two others attributes that are not the key for the table. In normalization theory we say that if some attribute depends on others attributes of the table which are not the key
+we should split the table.
+
+Create a new entity that has start and end has primary key and a field length. 	Remove length attribute from the section entity.
 
 
 
