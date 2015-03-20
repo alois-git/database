@@ -112,6 +112,14 @@ we should split the table.
 
 Create a new entity that has start and end has primary key and a field length. 	Remove length attribute from the section entity.
 
+3.h)
+
+Conceptual design : We need to create a new entity employee and use a IS A relationship with the entity driver and director. The driver would have a relation driver with entity travel and the director would have a relation direct
+with entity station.
+
+Logical design : Create the 3 new table : employee, driver and director. Employee table will have the attribute of the table agent : empno, address, name. Driver and director table will have the empno attribute 
+to reference the employe. There is a little drawback with this is that you need to access to table to get a employee. What we can do instead is creating only two table, Driver and director and have all the attributes contains in both table this would make more sence because we cannot be both driver and director.
+
 
 
  
