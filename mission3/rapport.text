@@ -1,63 +1,91 @@
-1.a)
+\documentclass[a4paper, 12pt]{article}
+\usepackage[frenchb]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[Conny]{fncychap}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{placeins}
+\title{LINGI2172 : Mission 3} 
+\author{Alois Paulus} 
 
-A) 
+\begin{document}
 
-1) In the table client, the domain of the attribute groups does not only include atomic values. This break the 1FN.
-You can see that in groups you can have multiple values, it is an array of values : 'customer, employee'. 
+\maketitle
 
-2) This is bad because it is hard to define a domain for the attribute groups and also searching throw the data is harder because we have
-to analyse the content of the attribute groups.
+\section{Question 1}
 
-3) If we want every client which is in the group customer, the query will not be that easy, it will need to look inside the content of the attribute groups for every client. This can take a long time if the list of groups for the costumers are big and is really not easy to query. Also if you want to enumerate every group that exist it gets really complicated.
+\subsection{1.a}
 
-4) To fix this we sould remove the attribute groups from the client table and create a new table having 2 attributes, the client ID and a group name.
-
- 
-B)
-
-
-1) In the table OrderLine we have the dependencies : 
+\subsubsection{Flaw 1}
 
 \begin{enumerate}
+\item In the table client, the domain of the attribute groups does not only include atomic values. This break the 1FN.
+You can see that in groups you can have multiple values, it is an array of values : 'customer, employee'. 
+
+\item This is bad because it is hard to define a domain for the attribute groups and also searching throw the data is harder because we have
+to analyse the content of the attribute groups.
+
+\item If we want every client which is in the group customer, the query will not be that easy, it will need to look inside the content of the attribute groups for every client. This can take a long time if the list of groups for the costumers are big and is really not easy to query. Also if you want to enumerate every group that exist it gets really complicated.
+
+\item To fix this we sould remove the attribute groups from the client table and create a new table having 2 attributes, the client ID and a group name.
+\end{enumerate}
+ 
+\subsubsection{Flaw 2}
+
+
+\begin{enumerate}
+
+\item In the table OrderLine we have the dependencies : 
+
+\begin{itemize}
 \item OrderLine# -> order#, product#, qty,price  
 \item product# -> price
-\end{enumerate}
+\end{itemize}
 
 This violate the 3FN because a database should not have transitive functional dependency. This means that a non key attributes depends on
 a attribute which is not part of the key.
 
-2) This is bad because a redondancy and also for retrieving the price of a product easily.
+\item This is bad because a redondancy and also for retrieving the price of a product easily.
 
-3) For example I have multiple row containing the qty "1" and the product with id "1" you will have multiple time the same price in the
+\item For example I have multiple row containing the qty "1" and the product with id "1" you will have multiple time the same price in the
 OrderLine table. This is redondent and can be avoided.
 
-4) We can avoid this by removing the price attribute from the OrderLine table and put it in the Product table. 
+\item We can avoid this by removing the price attribute from the OrderLine table and put it in the Product table. 
+\end{enumerate}
+
+\subsubsection{Flaw 3}
 
 
-C)
+\begin{enumerate}
+\item In the promotion table we have the attribute order# which is useless because we can retrieve it with the orderline# attibute ( orderline# -> order#). 
 
-1) In the promotion table we have the attribute order# which is useless because we can retrieve it with the orderline# attibute ( orderline# -> order#). 
+\item This is bad because of redondancy and we keep a useless attribute for nothing. Also we can have inconsistent data.
 
-2) This is bad because of redondancy and we keep a useless attribute for nothing. Also we can have inconsistent data.
+\item For exemple we could have a promotion with a orderline from order X and a order of value Y. This is totaly wrong, the orderline is not contained in the order Y. 
 
-3) For exemple we could have a promotion with a orderline from order X and a order of value Y. This is totaly wrong, the orderline is not contained in the order Y. 
+\item Removing the attribute order# from the promotion table would solve the problem and it will also reduce redondency.
+\end{enumerate}
 
-4) Removing the attribute order# from the promotion table would solve the problem and it will also reduce redondency.
+\subsubsection{Flaw 4}
 
-D)
+\begin{enumerate}
+\item In the table Order we have the attribute orderTotal which is a calculated attribute and should not be part of the Order table, rather it should be calculated from the order lines, products and promotions table. This is maybe less performance oriented but avoid duplicate data.
 
-1) In the table Order we have the attribute orderTotal which is a calculated attribute and should not be part of the Order table, rather it should be calculated from the order lines, products and promotions table. This is maybe less performance oriented but avoid duplicate data.
+\item This can be bad because we can store a wrong total and make our database inconsistent.
 
-2) This can be bad because we can store a wrong total and make our database inconsistent.
+\item For exemple if a item price changes. 
 
-3) For exemple if a item price changes. 
-
-4) Removing the attribute orderTotal and make the calculation every time we need it. I have to agree that this problem is more complicated than the previous problems, because we might want to keep the price for a order at a given date. 
+\item Removing the attribute orderTotal and make the calculation every time we need it. I have to agree that this problem is more complicated than the previous problems, because we might want to keep the price for a order at a given date. 
 It is indeed strange to have a different amount for the same order if we calculate it on a different date.
+\end{enumerate}
 
-2)
 
-I can easily spot these failure in exercice 1 :
+\section{Question 2}
+
+I can easily spot these failures in exercice 1 :
 
 \begin{itemize}
 \item The database documentation is very poor and it took me some time to understand it because of that (Failure #2) 
@@ -66,27 +94,31 @@ I can easily spot these failure in exercice 1 :
 \item Some tables can have problem with data integrity, e.g promotion (Failure #9)
 \end{itemize}
 
-The one I find really important is, the naming convention.
+The one I find really important is : the naming convention.
 
-Deciding on a naming convention for your database and respecting it throught the entire database and during the whole development and beyond
-is a great way to ensure a good understanding of the database. Because when you see field named "a" or "myfieldTest" it is a lot harder to understand the database schema. Sometimes you can even come accross names that include reserved work or space which make it harder to build query.
+Deciding on a naming convention for your database and respecting it throught the entire database and during the whole development is a great way to ensure a good understanding of the database. Because when you see field named "a" or "myfieldTest" it is a lot harder to understand the database schema. Sometimes you can even come accross names that include reserved word or space which make it harder to build query. 
 
 
-3.a)
+\section{Question 3}
 
-1) 
+\subsection{3.a}
 
-The doubly stoked lines around entities means that they are weak entities. Weak entities cannot be identified by their attributes alone, they need to have a relationship with another entity. Usually weak entities have partial keys which are added to the key of the entity they are link to. This enable to identify a weak entity uniquely.
+\begin{enumerate}
+\item The doubly stoked lines around entities means that they are weak entities. Weak entities cannot be identified by their attributes alone, they need to have a relationship with another entity. Usually weak entities have partial keys which are added to the key of the entity they are link to. This enable to identify a weak entity uniquely.
 
 The double roles lines is a total participation constraint, it means that every entity must participate in the relationship. Here every Travel entity must have a following relationship with a Line entity. It is not true for Line entity.
 
-2) orderNum + code (the partial key from section + the key from Line)
+\item orderNum + code (the partial key from section + the key from Line)
+\end{enumerate}
 
-3.b) \figure{schema.png}
+\subsection{3.b}
 
-3.c) no it did not
+\includegraphic{schema.png}
 
-3.d) 
+\subsection{3.c}
+No it did not
+
+\subsection{3.d}
 
 Conceptual schema : the relation director become (0,1) for the station entity. 
 Logical schema : you can have station that does not have a director so you have to allow a null for the attribute director in station.
@@ -97,30 +129,31 @@ We should avoid null because the relational theory use a 2 valued logic, either 
 I think you should put a director table with agentID and stationID and if there is no agent for a station, there is not tuple in the table.
 
 
-3.e) Conceptual schema : You need to change the cardinality for the relation Line - Section to (1,n) instead of (0,n)
+\subsection{3.e}
 
-Logical schema : when you create a new line you should make sure that it is referenced by at least one section
+Conceptual schema : You need to change the cardinality for the relation Line - Section to (1,n) instead of (0,n)
+
+Logical schema : When you create a new line you should make sure that it is referenced by at least one section
 
 Tutorial D: TODO
 
 SQL: you have to use triggers to check that.
 
-3.f)
+\subsection{3.f}
 
-The attribute length depend on two others attributes that are not the key for the table. In normalization theory we say that if some attribute depends on others attributes of the table which are not the key
-we should split the table.
+The attribute length depend on two others attributes that are not the key of the table. In normalization theory we say that if some attribute depends on attributes of the table which are not the key we should split the table.
 
 Create a new entity that has start and end has primary key and a field length. 	Remove length attribute from the section entity.
 
-3.h)
+\subsection{3.h}
 
-Conceptual design : We need to create a new entity employee and use a IS A relationship with the entity driver and director. The driver would have a relation driver with entity travel and the director would have a relation direct
-with entity station.
+Conceptual design : We need to create a new entity employee and use a IS A relationship with the entity driver and director. The driver would have a relation driver with entity travel and the director would have a relation direct with entity station.
 
-Logical design : Create the 3 new table : employee, driver and director. Employee table will have the attribute of the table agent : empno, address, name. Driver and director table will have the empno attribute 
-to reference the employe. There is a little drawback with this is that you need to access to table to get a employee. What we can do instead is creating only two table, Driver and director and have all the attributes contains in both table this would make more sence because we cannot be both driver and director.
+Logical design : Create the 3 new table : employee, driver and director. Employee table will have the attribute of the table agent : empno, address, name. Driver and director table will have the empno attribute to reference the employe. There is a little drawback with this is that you need to access to table to get a employee. 
 
+What we can do instead is creating only two table, Driver and director and have all the attributes contains in both table this would make more sence because we cannot be both driver and director.
 
+\end{document}
 
  
 
